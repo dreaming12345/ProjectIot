@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashbord</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css
+  "
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <main class="w-90 mr-0">
+      <div class="row">
+        <div class="col-md-12 fw-bold fs-4">Dashbord</div>
+      </div>
+      <!-- card section -->
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <div class="card text-bg-primary mb-3 h-100">
+            <div class="card-header">Number of Student </div>
+            <div class="card-body">
+              <h5 class="card-title">44</h5>
+              <p class="card-text">
+                55% increase in the number of students
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-2">
+          <div class="card text-bg-success mb-3 h-100">
+            <div class="card-header"> Number of Teacher</div>
+            <div class="card-body">
+              <h5 class="card-title">56</h5>
+              <p class="card-text">
+                75% increase in the number of teachers
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-2">
+          <div class="card text-bg-warning mb-3 h-100">
+            <div class="card-header">Number of workers </div>
+            <div class="card-body">
+              <h5 class="card-title">66</h5>
+              <p class="card-text">
+                85% increase in the number of workers
+              </p>
+            </div>
+          </div>
+        </div>
+     
+      </div>
+      <!-- //card section -->
+      <!-- charts section -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Charts</div>
+            <div class="card-body">
+              <canvas class="chart" id="chart" width="400" height="200">
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Charts</div>
+            <div class="card-body">
+              <canvas class="barChart" id="barChart" width="400" height="200">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- charts section -->
+      <!-- table section -->
+      <div class="row mt-3 ">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Data tables</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table
+                  id="example"
+                  class="display data-table"
+                  style="width: 100%"
+                >
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Class</th>
+                      <th>Grade</th>
+                      <th>Age</th>
+                      <th>Date</th>
+                      <th>Payment</th>
+                    </tr>
+                  </thead>
+                  <tbody id="student-data">
+                    <!-- Dynamic rows will be inserted here -->
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>Name</th>
+                      <th>Class</th>
+                      <th>Grade</th>
+                      <th>Age</th>
+                      <th>Date</th>
+                      <th>Payment</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--//table section -->
+      </div>
+      <div class="row pt-3">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Charts</div>
+            <div class="card-body">
+              <canvas class="chartP" id="chartP" width="400" height="200">
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Charts</div>
+            <div class="card-body">
+              <canvas class="chartT" id="chartT" width="400" height="200">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- cha
+    </main>
+    <!-- //main -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js
+  "></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+      // Fetch data and populate the table
+      async function fetchAndPopulateTable() {
+        try {
+          const response = await fetch("http://localhost:3000/student");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+    
+          // Select tbody element
+          const tableBody = document.getElementById("student-data");
+    
+          tableBody.innerHTML = "";
+    
+          data.forEach((student) => {
+            const row = `
+              <tr>
+                <td>${student.name}</td>
+                <td>${student.class}</td>
+                <td>${student.grade}</td>
+                <td>${student.age}</td>
+                <td>${student.date}</td>
+                <td>${student.payment}</td>
+              </tr>
+            `;
+            tableBody.innerHTML += row;
+          });
+    
+          // Initialize DataTable
+          $(document).ready(function () {
+            $(".data-table").DataTable();
+          });
+        } catch (error) {
+          console.error("Error fetching and populating data:", error);
+        }
+      }
+    
+      // Call the function
+      fetchAndPopulateTable();
+    </script>
+  </body>
+</html>
